@@ -10,6 +10,7 @@ const ANALYZE_ENDPOINT =
   "https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/api/tdr/analizar";
 
 let compatibleAttachments: MailAttachment[] = [];
+let selectedAttachmentIds = new Set<string>();
 let retrievalId = 0;
 
 Office.onReady((info) => {
@@ -123,6 +124,7 @@ function renderCurrentMessage(): void {
   const sender = item.from;
   const attachments = (item.attachments || []) as MailAttachment[];
   compatibleAttachments = attachments.filter(isCompatibleAttachment);
+  selectedAttachmentIds = new Set(compatibleAttachments.map((attachment) => attachment.id));
 
   setText("message-subject", item.subject?.trim() || "(Sin asunto)");
   setText("sender-name", sender?.displayName?.trim() || "Remitente desconocido");
@@ -140,10 +142,16 @@ function renderCurrentMessage(): void {
 
 async function analyzeCompatibleAttachments(): Promise<void> {
   const item = Office.context.mailbox.item;
-  const attachments = [...compatibleAttachments];
+  const attachments = compatibleAttachments.filter((attachment) =>
+    selectedAttachmentIds.has(attachment.id)
+  );
   if (!item) return;
-  if (attachments.length === 0) {
+  if (compatibleAttachments.length === 0) {
     showAnalysisStatus("No se encontraron documentos PDF, DOCX o DOC para analizar.", "error");
+    return;
+  }
+  if (attachments.length === 0) {
+    showAnalysisStatus("Seleccione al menos un documento para analizar.", "error");
     return;
   }
   const operationId = ++retrievalId;
@@ -390,6 +398,21 @@ function renderCompatibleAttachments(attachments: MailAttachment[]): void {
   attachments.forEach((attachment) => {
     const row = document.createElement("li");
     row.className = "attachment";
+    const checkbox = document.createElement("input");
+    checkbox.className = "attachment__checkbox";
+    checkbox.type = "checkbox";
+    checkbox.checked = selectedAttachmentIds.has(attachment.id);
+    checkbox.setAttribute(
+      "aria-label",
+      `Seleccionar ${attachment.name || "documento"} para analizar`
+    );
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) {
+        selectedAttachmentIds.add(attachment.id);
+      } else {
+        selectedAttachmentIds.delete(attachment.id);
+      }
+    });
     const icon = document.createElement("span");
     icon.className = "attachment__icon";
     icon.setAttribute("aria-hidden", "true");
@@ -405,7 +428,7 @@ function renderCompatibleAttachments(attachments: MailAttachment[]): void {
     size.className = "attachment__size";
     size.textContent = formatFileSize(attachment.size);
     details.append(name, size);
-    row.append(icon, details);
+    row.append(checkbox, icon, details);
     list.appendChild(row);
   });
 }
@@ -445,10 +468,12 @@ function showAnalysisStatus(
   status.textContent = message;
   status.className = `analysis-status analysis-status--${state}`;
   status.classList.toggle("is-hidden", state === "idle");
+  document.getElementById("open-tdr-system")?.classList.toggle("is-hidden", state !== "success");
 }
 
 function clearMessage(): void {
   compatibleAttachments = [];
+  selectedAttachmentIds.clear();
   setText("message-subject", "—");
   setText("sender-name", "—");
   setText("sender-email", "");
