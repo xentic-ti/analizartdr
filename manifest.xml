@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0" xsi:type="MailApp">
+  <Id>e4a85901-9daa-4216-8b69-0688288ec042</Id>
+  <Version>1.0.0.3</Version>
+  <ProviderName>Xentic</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Analizar TDR"/>
+  <Description DefaultValue="Analiza documentos TDR directamente desde Outlook."/>
+  <IconUrl DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/assets/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/assets/icon-128.png"/>
+  <SupportUrl DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/"/>
+  <AppDomains>
+    <AppDomain>https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net</AppDomain>
+  </AppDomains>
+  <Hosts><Host Name="Mailbox"/></Hosts>
+  <Requirements><Sets><Set Name="Mailbox" MinVersion="1.8"/></Sets></Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/taskpane.html"/>
+        <RequestedHeight>250</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteItem</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or"><Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/></Rule>
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.8"><bt:Set Name="Mailbox"/></bt:Sets>
+    </Requirements>
+    <Hosts>
+      <Host xsi:type="MailHost">
+        <DesktopFormFactor>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="MessageReadCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="msgReadGroup">
+                <Label resid="GroupLabel"/>
+                <Control xsi:type="Button" id="AnalyzeTdrOpenPaneButton">
+                  <Label resid="AnalyzeTdrButton.Label"/>
+                  <Supertip>
+                    <Title resid="AnalyzeTdrButton.Label"/>
+                    <Description resid="AnalyzeTdrButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url"/></Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/assets/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Commands.Url" DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GroupLabel" DefaultValue="Analizar TDR"/>
+        <bt:String id="AnalyzeTdrButton.Label" DefaultValue="Analizar TDR"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="AnalyzeTdrButton.Tooltip" DefaultValue="Abre el panel de Analizar TDR para el correo actual."/>
+      </bt:LongStrings>
+    </Resources>
+
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.13"><bt:Set Name="Mailbox"/></bt:Sets>
+      </Requirements>
+      <Hosts>
+        <Host xsi:type="MailHost">
+          <DesktopFormFactor>
+            <SupportsSharedFolders>true</SupportsSharedFolders>
+            <FunctionFile resid="Commands.Url"/>
+            <ExtensionPoint xsi:type="MessageReadCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="msgReadGroup">
+                  <Label resid="GroupLabel"/>
+                  <Control xsi:type="Button" id="AnalyzeTdrOpenPaneButtonShared">
+                    <Label resid="AnalyzeTdrButton.Label"/>
+                    <Supertip>
+                      <Title resid="AnalyzeTdrButton.Label"/>
+                      <Description resid="AnalyzeTdrButton.Tooltip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Icon.16x16"/>
+                      <bt:Image size="32" resid="Icon.32x32"/>
+                      <bt:Image size="80" resid="Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane"><SourceLocation resid="Taskpane.Url"/></Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+      <Resources>
+        <bt:Images>
+          <bt:Image id="Icon.16x16" DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/assets/icon-16.png"/>
+          <bt:Image id="Icon.32x32" DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/assets/icon-32.png"/>
+          <bt:Image id="Icon.80x80" DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/assets/icon-80.png"/>
+        </bt:Images>
+        <bt:Urls>
+          <bt:Url id="Commands.Url" DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/commands.html"/>
+          <bt:Url id="Taskpane.Url" DefaultValue="https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/outlook-addin/taskpane.html"/>
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="GroupLabel" DefaultValue="Analizar TDR"/>
+          <bt:String id="AnalyzeTdrButton.Label" DefaultValue="Analizar TDR"/>
+        </bt:ShortStrings>
+        <bt:LongStrings>
+          <bt:String id="AnalyzeTdrButton.Tooltip" DefaultValue="Abre el panel de Analizar TDR para el correo actual."/>
+        </bt:LongStrings>
+      </Resources>
+    </VersionOverrides>
+  </VersionOverrides>
+</OfficeApp>

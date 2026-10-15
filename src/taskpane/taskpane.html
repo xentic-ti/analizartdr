@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Analizar TDR</title>
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <link href="taskpane.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <section id="sideload-msg" class="loading" aria-live="polite">Cargando información del correo…</section>
+    <main id="app-body" class="app is-hidden">
+        <header class="app__header">
+            <div><p class="eyebrow">ANALIZAR TDR</p><h1>Correo abierto</h1></div>
+            <button id="refresh" class="refresh" type="button" title="Actualizar información" aria-label="Actualizar información">↻</button>
+        </header>
+        <p id="status" class="status is-hidden" role="status"></p>
+        <section class="card" aria-labelledby="message-heading">
+            <h2 id="message-heading">Mensaje</h2>
+            <div class="field"><span class="field__label">Asunto</span><p id="message-subject" class="field__value">—</p></div>
+            <div class="field"><span class="field__label">Remitente</span><p id="sender-name" class="field__value">—</p><p id="sender-email" class="field__secondary"></p></div>
+        </section>
+        <section class="card" aria-labelledby="attachments-heading">
+            <div class="section-heading"><h2 id="attachments-heading">Documentos compatibles</h2><span id="document-count" class="count" aria-label="Cantidad de documentos compatibles">0</span></div>
+            <p id="document-empty" class="empty">Este correo no tiene documentos PDF, DOCX o DOC adjuntos.</p>
+            <ul id="document-list" class="attachments" aria-label="Documentos compatibles adjuntos"></ul>
+        </section>
+        <section class="card" aria-labelledby="authentication-heading">
+            <h2 id="authentication-heading">Autenticación</h2>
+            <button id="test-auth" class="secondary-action" type="button">Probar autenticación</button>
+            <p id="auth-status" class="analysis-status analysis-status--idle is-hidden" role="status" aria-live="polite"></p>
+        </section>
+        <button id="analyze" class="analyze" type="button" disabled>Analizar TDR</button>
+        <p id="analysis-status" class="analysis-status analysis-status--idle is-hidden" role="status" aria-live="polite"></p>
+    </main>
+</body>
+</html>
