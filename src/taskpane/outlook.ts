@@ -1,4 +1,4 @@
-/* global document, Office, console, window, HTMLButtonElement, FormData, Blob, Response, fetch */
+/* global document, Office, console, window, HTMLAnchorElement, HTMLButtonElement, FormData, Blob, Response, fetch */
 
 import { authenticateWithNaa, formatAuthenticationError, isNestedAppAuthSupported } from "./auth";
 
@@ -8,6 +8,8 @@ type JwtPayload = Record<string, unknown>;
 
 const ANALYZE_ENDPOINT =
   "https://sistematdr-g4c5asddesgbd7bh.southcentralus-01.azurewebsites.net/api/tdr/analizar";
+const TDR_SYSTEM_URL =
+  "https://xenticsac2015.sharepoint.com/sites/gestiontdr/SitePages/CollabHome.aspx";
 
 let compatibleAttachments: MailAttachment[] = [];
 let selectedAttachmentIds = new Set<string>();
@@ -318,11 +320,15 @@ function showBackendResponse(
   }
 
   if (data.alreadyProcessed === true && status === "completed") {
-    showAnalysisStatus(details || "Este correo ya había sido procesado correctamente.", "success");
+    showAnalysisStatus(
+      details || "Este correo ya había sido procesado correctamente.",
+      "success",
+      data.tdrId
+    );
     return;
   }
 
-  showAnalysisStatus(details || "TDR procesado correctamente.", "success");
+  showAnalysisStatus(details || "TDR procesado correctamente.", "success", data.tdrId);
 }
 
 function getApiMessage(data: ApiResponse): string | undefined {
@@ -461,14 +467,22 @@ function setAnalyzeBusy(busy: boolean): void {
 
 function showAnalysisStatus(
   message: string,
-  state: "idle" | "loading" | "success" | "error"
+  state: "idle" | "loading" | "success" | "error",
+  tdrId?: unknown
 ): void {
   const status = document.getElementById("analysis-status");
   if (!status) return;
   status.textContent = message;
   status.className = `analysis-status analysis-status--${state}`;
   status.classList.toggle("is-hidden", state === "idle");
-  document.getElementById("open-tdr-system")?.classList.toggle("is-hidden", state !== "success");
+
+  const tdrLink = document.getElementById("open-tdr-system") as HTMLAnchorElement | null;
+  if (!tdrLink) return;
+
+  const hasValidTdrId = typeof tdrId === "number" && Number.isInteger(tdrId) && tdrId > 0;
+  tdrLink.href = hasValidTdrId ? `${TDR_SYSTEM_URL}?tdrId=${tdrId}` : TDR_SYSTEM_URL;
+  tdrLink.textContent = hasValidTdrId ? "Abrir TDR procesado" : "Abrir Sistema TDR";
+  tdrLink.classList.toggle("is-hidden", state !== "success");
 }
 
 function clearMessage(): void {
